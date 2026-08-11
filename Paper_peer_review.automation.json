@@ -1,0 +1,410 @@
+{
+  "format": "2ndopinion-automation",
+  "version": "1.0",
+  "exportedAt": "2026-08-11T22:01:30.011Z",
+  "metadata": {
+    "id": "51cbe748-1cc2-4101-b76b-49490e63bcf6",
+    "name": "Paper peer review",
+    "author": {
+      "name": "Altuna Akalin",
+      "institution": "MDC",
+      "email": "aakalin@gmail.com"
+    }
+  },
+  "steps": [
+    {
+      "id": "input_1786469791852_wf7ud",
+      "name": "paper PDF",
+      "kind": "input",
+      "systemPrompt": "",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786469819386_zmj6i",
+          "fromPort": "default",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786476324346_6bkfh",
+          "fromPort": "default",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786479171549_t9xlt",
+          "fromPort": "default",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786479260080_amm4a",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 344,
+        "y": 313
+      },
+      "inputConfig": {
+        "mediaType": "pdf",
+        "label": "paper PDF",
+        "required": true,
+        "description": "provide the PDF of the paper.",
+        "visionModel": "default"
+      }
+    },
+    {
+      "id": "step_1786469819386_zmj6i",
+      "name": "Extract claims 1",
+      "kind": "step",
+      "systemPrompt": "You are reviewing a scientific manuscript.\n\nExtract the 3 most important scientific claims made by the authors.\n\nA claim should be a conclusion that the manuscript is trying to establish with its own data. Prioritize claims that are central to the paper’s main contribution and that appear in the title, abstract, results, or discussion.\n\nDo not include:\n\nbackground statements or established knowledge\nmethodological descriptions\nminor observations\nspeculative statements that are not presented as conclusions\n\nFor each claim, provide:\n\nClaim: Rewrite the claim as one clear, specific sentence.\nImportance: Briefly explain why this claim is central to the paper.\nClaim type: Classify it as one of: descriptive, association, causal, mechanistic, therapeutic/efficacy, diagnostic/prognostic, or methodological.\nSource: Identify where the claim is primarily made or supported in the manuscript (e.g. Abstract, Results section, Figure 2, Discussion).\n\nRank the claims from most important to least important.\n\nIf the manuscript contains fewer than 3 substantial claims, return only the claims that are genuinely central rather than inventing additional ones.",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786479167864_gm4pi",
+          "fromPort": "claim2",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786479171549_t9xlt",
+          "fromPort": "claim2",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786479223442_sq09y",
+          "fromPort": "claim2",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786479255694_v93ct",
+          "fromPort": "claim3",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786479260080_amm4a",
+          "fromPort": "claim3",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786479263921_7a7x8",
+          "fromPort": "claim3",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786477166779_ildvm",
+          "fromPort": "claim1",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786476324346_6bkfh",
+          "fromPort": "claim1",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786476221302_fy70h",
+          "fromPort": "claim1",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786477864679_ab3tt",
+          "fromPort": "claim1",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786479343815_3r00h",
+          "fromPort": "claim2",
+          "toPort": "default"
+        },
+        {
+          "to": "step_1786479381012_1423i",
+          "fromPort": "claim3",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 386,
+        "y": 555
+      },
+      "outputs": [
+        {
+          "name": "claim1",
+          "type": "text"
+        },
+        {
+          "name": "claim2",
+          "type": "text"
+        },
+        {
+          "name": "claim3",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "step_1786476221302_fy70h",
+      "name": "Claim 1 Literature Search",
+      "kind": "step",
+      "systemPrompt": "Given the scientific claim, search PubMed and the web for the most relevant prior research.\n\nFocus on papers that directly test the same claim or closely related relationships. Prefer primary research and recent or highly relevant studies.\n\nSummarize the literature relative to the claim and assign ONE judgment:\n\nAlready established — the core claim has been demonstrated previously.\nPartially established / incremental — parts of the claim are known, but the manuscript adds a meaningful extension.\nPotentially novel — relevant literature exists, but no prior study found appears to demonstrate the core claim.\nConflicting literature — credible studies provide materially different or opposing conclusions.\nInsufficient literature to judge — too little relevant evidence was found to assess novelty or consistency.\n\nRules:\n\nDo not assume a claim is novel simply because an exact-match paper was not found.\nSearch using alternative terminology and related concepts before judging novelty.\nBase the judgment only on retrieved literature.\nDo not invent papers or findings.\nIf evidence is weak or ambiguous, choose \"Insufficient literature to judge.\"\n\nReturn:\n\nJUDGMENT:\n[one category]\n\nRATIONALE:\n[2–4 concise sentences explaining what is already known, what appears new, and any important conflicting evidence]\n\nKEY PAPERS:\n[up to 5 most relevant papers]",
+      "allowedTools": [
+        "pubmed-search",
+        "web-search"
+      ],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786478666608_l2f1z",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 97,
+        "y": 814
+      }
+    },
+    {
+      "id": "step_1786476324346_6bkfh",
+      "name": "claim support",
+      "kind": "step",
+      "systemPrompt": "Given a scientific claim and the manuscript text, extract the specific experiments, analyses, and results used to support that claim.\n\nFor each piece of supporting evidence, identify:\n\nExperiment/analysis: What was done?\nSystem/sample: What model, population, dataset, cells, animals, or samples were used?\nComparison/control: What groups or conditions were compared?\nMeasurement: What outcome, assay, variable, or endpoint was measured?\nResult: What was observed, including quantitative results and statistical evidence when available?\nRelevance to claim: Which part of the claim does this result support?\n\nInclude relevant perturbations, controls, validation experiments, sample sizes, effect sizes, statistical tests, and figure/table references when stated in the manuscript.\n\nDo not infer experiments or results that are not explicitly reported.\n\nOutput:\n\nCLAIM:\n[claim]\n\nSUPPORTING EVIDENCE:\n\nExperiment/analysis:\nSystem/sample:\nComparison/control:\nMeasurement:\nResult:\nRelevance to claim:\nSource:\n...\n\nOVERALL SUPPORT:\n[Briefly summarize how the reported evidence connects to the claim, without judging whether it is sufficient.]",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786477864679_ab3tt",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": -48,
+        "y": 769
+      }
+    },
+    {
+      "id": "step_1786477166779_ildvm",
+      "name": "Support needed",
+      "kind": "step",
+      "systemPrompt": "You are a scientific peer reviewer.\n\nGiven a scientific claim, identify the minimum evidence needed to support it convincingly.\n\nFor each requirement:\n\ndescribe the experiment, analysis, or evidence needed\nlabel it as ESSENTIAL or SUPPORTING\nbriefly explain why it is needed\n\nAdjust the evidentiary bar to the claim type (descriptive, associative, causal, mechanistic, therapeutic, etc.).\n\nInclude critical controls or validation experiments where relevant.\n\nDo not evaluate the manuscript itself and do not assume correlation proves causation.\n\nKeep the output concise and focus on the 3 most important evidence requirements.",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786477864679_ab3tt",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": -192,
+        "y": 763
+      }
+    },
+    {
+      "id": "step_1786477864679_ab3tt",
+      "name": "claim 1 support reasoning",
+      "kind": "step",
+      "systemPrompt": "You are a scientific peer reviewer.\n\nYou will receive:\n\nA scientific claim.\nThe evidence provided by the manuscript to support that claim.\nThe evidence that would normally be required to support the claim convincingly.\n\nCompare the manuscript's evidence against the required evidence and assess whether the claim is justified.\n\nClassify the claim as ONE of:\n\nSupported — the essential evidence is present and directly supports the claim.\nMostly supported — the main claim is supported, but some non-critical evidence or validation is missing.\nPartially supported — some important parts are supported, but essential evidence is missing.\nUnsupported — the evidence does not adequately demonstrate the claim.\nOverstated — the evidence supports a weaker or narrower conclusion than the claim being made.\n\nRules:\n\nFocus on whether the evidence supports the specific wording and strength of the claim.\nDistinguish association from causation and mechanism.\nTreat missing essential evidence more seriously than missing supporting evidence.\nDo not invent missing experiments or criticisms.\nIf the evidence supports a weaker version of the claim, classify it as Overstated and state what weaker conclusion is justified.\n\nOutput:\nCLAIM:\n[Provide the claim verbatim]\n\nVERDICT:\n[Supported / Mostly supported / Partially supported / Unsupported / Overstated]\n\nREASONING:\n[2–4 sentences explaining which required evidence is present, what is missing or insufficient, and why this leads to the verdict]\n\nSUPPORTED VERSION:\n[If overstated or partially supported, give the strongest version of the claim that the current evidence supports. Otherwise write \"Original claim is adequately supported.\"]",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786478666608_l2f1z",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": -68,
+        "y": 1061
+      }
+    },
+    {
+      "id": "step_1786478666608_l2f1z",
+      "name": "final synthesis",
+      "kind": "step",
+      "systemPrompt": "You are a scientific peer reviewer.\n\nYou will receive evaluations of the manuscript's main claims, including their novelty, literature context, required evidence, evidence actually provided by the manuscript, and any identified weaknesses.\n\nSynthesize these evaluations into a concise peer-review report.\n\nIdentify up to 3 MAJOR points and up to 3 MINOR points.\n\nMAJOR points should only include issues that materially affect the validity, interpretation, or support of an important manuscript claim.\n\nMINOR points should include useful but non-critical issues related to reporting, clarification, contextualization, controls, or presentation.\n\nRules:\n\nDo not invent criticisms.\nDo not create a point simply to reach 3.\nMerge overlapping issues across claims.\nPrioritize issues by their impact on the manuscript's conclusions.\nExplain why each issue matters.\nWhen possible, suggest a concrete way to address it. Do not assume the reader knows about your input. Write it for the author of the paper.\n\nOutput:\n\nMAJOR POINTS\n\n[issue]\n[issue]\n[issue]\n\nMINOR POINTS\n\n[issue]\n[issue]\n[issue]\n\nIf fewer meaningful issues are identified, return fewer points.",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [],
+      "position": {
+        "x": 372,
+        "y": 1357
+      }
+    },
+    {
+      "id": "step_1786479167864_gm4pi",
+      "name": "Support needed 2",
+      "kind": "step",
+      "systemPrompt": "You are a scientific peer reviewer.\n\nGiven a scientific claim, identify the minimum evidence needed to support it convincingly.\n\nFor each requirement:\n\ndescribe the experiment, analysis, or evidence needed\nlabel it as ESSENTIAL or SUPPORTING\nbriefly explain why it is needed\n\nAdjust the evidentiary bar to the claim type (descriptive, associative, causal, mechanistic, therapeutic, etc.).\n\nInclude critical controls or validation experiments where relevant.\n\nDo not evaluate the manuscript itself and do not assume correlation proves causation.\n\nKeep the output concise and focus on the 3 most important evidence requirements.",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786479343815_3r00h",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 268,
+        "y": 779
+      }
+    },
+    {
+      "id": "step_1786479171549_t9xlt",
+      "name": "claim support 2",
+      "kind": "step",
+      "systemPrompt": "Given a scientific claim and the manuscript text, extract the specific experiments, analyses, and results used to support that claim.\n\nFor each piece of supporting evidence, identify:\n\nExperiment/analysis: What was done?\nSystem/sample: What model, population, dataset, cells, animals, or samples were used?\nComparison/control: What groups or conditions were compared?\nMeasurement: What outcome, assay, variable, or endpoint was measured?\nResult: What was observed, including quantitative results and statistical evidence when available?\nRelevance to claim: Which part of the claim does this result support?\n\nInclude relevant perturbations, controls, validation experiments, sample sizes, effect sizes, statistical tests, and figure/table references when stated in the manuscript.\n\nDo not infer experiments or results that are not explicitly reported.\n\nOutput:\n\nCLAIM:\n[claim]\n\nSUPPORTING EVIDENCE:\n\nExperiment/analysis:\nSystem/sample:\nComparison/control:\nMeasurement:\nResult:\nRelevance to claim:\nSource:\n...\n\nOVERALL SUPPORT:\n[Briefly summarize how the reported evidence connects to the claim, without judging whether it is sufficient.]",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786479343815_3r00h",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 405,
+        "y": 783
+      }
+    },
+    {
+      "id": "step_1786479223442_sq09y",
+      "name": "Claim 2 Literature Search",
+      "kind": "step",
+      "systemPrompt": "Given the scientific claim, search PubMed and the web for the most relevant prior research.\n\nFocus on papers that directly test the same claim or closely related relationships. Prefer primary research and recent or highly relevant studies.\n\nSummarize the literature relative to the claim and assign ONE judgment:\n\nAlready established — the core claim has been demonstrated previously.\nPartially established / incremental — parts of the claim are known, but the manuscript adds a meaningful extension.\nPotentially novel — relevant literature exists, but no prior study found appears to demonstrate the core claim.\nConflicting literature — credible studies provide materially different or opposing conclusions.\nInsufficient literature to judge — too little relevant evidence was found to assess novelty or consistency.\n\nRules:\n\nDo not assume a claim is novel simply because an exact-match paper was not found.\nSearch using alternative terminology and related concepts before judging novelty.\nBase the judgment only on retrieved literature.\nDo not invent papers or findings.\nIf evidence is weak or ambiguous, choose \"Insufficient literature to judge.\"\n\nReturn:\n\nJUDGMENT:\n[one category]\n\nRATIONALE:\n[2–4 concise sentences explaining what is already known, what appears new, and any important conflicting evidence]\n\nKEY PAPERS:\n[up to 5 most relevant papers]",
+      "allowedTools": [
+        "pubmed-search",
+        "web-search"
+      ],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786478666608_l2f1z",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 550,
+        "y": 797
+      }
+    },
+    {
+      "id": "step_1786479255694_v93ct",
+      "name": "Support needed 3",
+      "kind": "step",
+      "systemPrompt": "You are a scientific peer reviewer.\n\nGiven a scientific claim, identify the minimum evidence needed to support it convincingly.\n\nFor each requirement:\n\ndescribe the experiment, analysis, or evidence needed\nlabel it as ESSENTIAL or SUPPORTING\nbriefly explain why it is needed\n\nAdjust the evidentiary bar to the claim type (descriptive, associative, causal, mechanistic, therapeutic, etc.).\n\nInclude critical controls or validation experiments where relevant.\n\nDo not evaluate the manuscript itself and do not assume correlation proves causation.\n\nKeep the output concise and focus on the 3 most important evidence requirements.",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786479381012_1423i",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 700,
+        "y": 796
+      }
+    },
+    {
+      "id": "step_1786479260080_amm4a",
+      "name": "claim support 3",
+      "kind": "step",
+      "systemPrompt": "Given a scientific claim and the manuscript text, extract the specific experiments, analyses, and results used to support that claim.\n\nFor each piece of supporting evidence, identify:\n\nExperiment/analysis: What was done?\nSystem/sample: What model, population, dataset, cells, animals, or samples were used?\nComparison/control: What groups or conditions were compared?\nMeasurement: What outcome, assay, variable, or endpoint was measured?\nResult: What was observed, including quantitative results and statistical evidence when available?\nRelevance to claim: Which part of the claim does this result support?\n\nInclude relevant perturbations, controls, validation experiments, sample sizes, effect sizes, statistical tests, and figure/table references when stated in the manuscript.\n\nDo not infer experiments or results that are not explicitly reported.\n\nOutput:\n\nCLAIM:\n[claim]\n\nSUPPORTING EVIDENCE:\n\nExperiment/analysis:\nSystem/sample:\nComparison/control:\nMeasurement:\nResult:\nRelevance to claim:\nSource:\n...\n\nOVERALL SUPPORT:\n[Briefly summarize how the reported evidence connects to the claim, without judging whether it is sufficient.]",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786479381012_1423i",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 832,
+        "y": 798
+      }
+    },
+    {
+      "id": "step_1786479263921_7a7x8",
+      "name": "Claim 3 Literature Search",
+      "kind": "step",
+      "systemPrompt": "Given the scientific claim, search PubMed and the web for the most relevant prior research.\n\nFocus on papers that directly test the same claim or closely related relationships. Prefer primary research and recent or highly relevant studies.\n\nSummarize the literature relative to the claim and assign ONE judgment:\n\nAlready established — the core claim has been demonstrated previously.\nPartially established / incremental — parts of the claim are known, but the manuscript adds a meaningful extension.\nPotentially novel — relevant literature exists, but no prior study found appears to demonstrate the core claim.\nConflicting literature — credible studies provide materially different or opposing conclusions.\nInsufficient literature to judge — too little relevant evidence was found to assess novelty or consistency.\n\nRules:\n\nDo not assume a claim is novel simply because an exact-match paper was not found.\nSearch using alternative terminology and related concepts before judging novelty.\nBase the judgment only on retrieved literature.\nDo not invent papers or findings.\nIf evidence is weak or ambiguous, choose \"Insufficient literature to judge.\"\n\nReturn:\n\nJUDGMENT:\n[one category]\n\nRATIONALE:\n[2–4 concise sentences explaining what is already known, what appears new, and any important conflicting evidence]\n\nKEY PAPERS:\n[up to 5 most relevant papers]",
+      "allowedTools": [
+        "pubmed-search",
+        "web-search"
+      ],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786478666608_l2f1z",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 973,
+        "y": 802
+      }
+    },
+    {
+      "id": "step_1786479343815_3r00h",
+      "name": "claim 2 support reasoning ",
+      "kind": "step",
+      "systemPrompt": "You are a scientific peer reviewer.\n\nYou will receive:\n\nA scientific claim.\nThe evidence provided by the manuscript to support that claim.\nThe evidence that would normally be required to support the claim convincingly.\n\nCompare the manuscript's evidence against the required evidence and assess whether the claim is justified.\n\nClassify the claim as ONE of:\n\nSupported — the essential evidence is present and directly supports the claim.\nMostly supported — the main claim is supported, but some non-critical evidence or validation is missing.\nPartially supported — some important parts are supported, but essential evidence is missing.\nUnsupported — the evidence does not adequately demonstrate the claim.\nOverstated — the evidence supports a weaker or narrower conclusion than the claim being made.\n\nRules:\n\nFocus on whether the evidence supports the specific wording and strength of the claim.\nDistinguish association from causation and mechanism.\nTreat missing essential evidence more seriously than missing supporting evidence.\nDo not invent missing experiments or criticisms.\nIf the evidence supports a weaker version of the claim, classify it as Overstated and state what weaker conclusion is justified.\n\nOutput:\n\nVERDICT:\n[Supported / Mostly supported / Partially supported / Unsupported / Overstated]\n\nREASONING:\n[2–4 sentences explaining which required evidence is present, what is missing or insufficient, and why this leads to the verdict]\n\nSUPPORTED VERSION:\n[If overstated or partially supported, give the strongest version of the claim that the current evidence supports. Otherwise write \"Original claim is adequately supported.\"]",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786478666608_l2f1z",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 327,
+        "y": 949
+      }
+    },
+    {
+      "id": "step_1786479381012_1423i",
+      "name": "claim 3 support reasoning ",
+      "kind": "step",
+      "systemPrompt": "You are a scientific peer reviewer.\n\nYou will receive:\n\nA scientific claim.\nThe evidence provided by the manuscript to support that claim.\nThe evidence that would normally be required to support the claim convincingly.\n\nCompare the manuscript's evidence against the required evidence and assess whether the claim is justified.\n\nClassify the claim as ONE of:\n\nSupported — the essential evidence is present and directly supports the claim.\nMostly supported — the main claim is supported, but some non-critical evidence or validation is missing.\nPartially supported — some important parts are supported, but essential evidence is missing.\nUnsupported — the evidence does not adequately demonstrate the claim.\nOverstated — the evidence supports a weaker or narrower conclusion than the claim being made.\n\nRules:\n\nFocus on whether the evidence supports the specific wording and strength of the claim.\nDistinguish association from causation and mechanism.\nTreat missing essential evidence more seriously than missing supporting evidence.\nDo not invent missing experiments or criticisms.\nIf the evidence supports a weaker version of the claim, classify it as Overstated and state what weaker conclusion is justified.\n\nOutput:\n\nVERDICT:\n[Supported / Mostly supported / Partially supported / Unsupported / Overstated]\n\nREASONING:\n[concise sentences explaining which required evidence is present, what is missing or insufficient, and why this leads to the verdict]\n\nSUPPORTED VERSION:\n[If overstated or partially supported, give the strongest version of the claim that the current evidence supports. Otherwise write \"Original claim is adequately supported.\"]",
+      "allowedTools": [],
+      "modelPolicy": "cloud_allowed",
+      "jsonMode": false,
+      "edges": [
+        {
+          "to": "step_1786478666608_l2f1z",
+          "fromPort": "default",
+          "toPort": "default"
+        }
+      ],
+      "position": {
+        "x": 672,
+        "y": 1000
+      }
+    }
+  ]
+}
