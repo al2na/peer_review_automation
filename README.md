@@ -1,4 +1,5 @@
 # 📄 Scientific Paper Peer Review Automation
+-
 An automated, multi-agent peer-review workflow for **2ndOpinion Desktop**. This workflow processes a scientific manuscript PDF, extracts its core claims, searches literature databases (PubMed & web) for novelty and prior evidence, evaluates whether the reported data justifies each claim, and synthesizes a structured peer-review report.
 ---
 ## 📌 About This Automation
