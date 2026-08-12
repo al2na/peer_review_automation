@@ -14,8 +14,10 @@ The **Paper Peer Review** automation performs an in-depth, multi-stage scientifi
 1. Download and install **[2ndOpinion Desktop](https://2ndopin.io/desktop)** for macOS or Windows.
 2. Launch 2ndOpinion and navigate to the **Automations** tab from the main sidebar.
 ### Step 2: Import the Automation
-1. Download `Paper_peer_review.automation.json` from this repository.
+1. Download `Paper_peer_review.automation.json`[link](https://github.com/al2na/peer_review_automation/blob/496818e02693187d0729c5529de13b8f88d46756/Paper_peer_review.automation.json) from this repository.
 2. In 2ndOpinion Desktop, click **Import Automation** (or the **Import** button in the Automations sidebar).
+
+<img width="589" height="68" alt="image" src="https://github.com/user-attachments/assets/bbe5d05b-9e53-4fdb-b27c-f5484af5bdb2" />
 3. Select `Paper_peer_review.automation.json` to load the graph workflow onto your canvas.
 ### Step 3: Run the Automation with your PDF
 1. Switch to **Run Mode** on the automation canvas.
