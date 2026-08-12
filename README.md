@@ -18,7 +18,9 @@ The **Paper Peer Review** automation performs an in-depth, multi-stage scientifi
 2. In 2ndOpinion Desktop, click **Import Automation** (or the **Import** button in the Automations sidebar).
 
 <img width="589" height="68" alt="image" src="https://github.com/user-attachments/assets/bbe5d05b-9e53-4fdb-b27c-f5484af5bdb2" />
+
 3. Select `Paper_peer_review.automation.json` to load the graph workflow onto your canvas.
+
 ### Step 3: Run the Automation with your PDF
 1. Switch to **Run Mode** on the automation canvas.
 2. In the **Run Parameters** panel (or on the `paper PDF` input node), click **Choose file** and select the manuscript PDF you want to review.
